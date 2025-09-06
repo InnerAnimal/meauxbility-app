@@ -94,8 +94,10 @@
       try {
         const res = await fetch("https://ajhltmrehtytpzbdhepa.supabase.co/functions/v1/submitApplication", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
+              headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqaGx0bXJlaHR5dHB6YmRoZXBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxNDgxMTcsImV4cCI6MjA3MjcyNDExN30.UOXH-fDklNpWi9yph6bFIMkswuQV9THI9sBxNU9exF4"
+      },  body: JSON.stringify(data)
         });
         const result = await res.json();
         if (result.success) {
