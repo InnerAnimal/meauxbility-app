@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apply for Support | Meauxbility</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --meaux-orange: #FF7619;
+      --meaux-teal: #1F97A9;
+      --bg-soft: #fdfdfd;
+      --text-dark: #0a0a0a;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: var(--bg-soft);
+      color: var(--text-dark);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    label {
+      display: block;
+      margin-bottom: 1rem;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      background: var(--meaux-orange);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background: #e65d00;
+    }
+    #appFormStatus {
+      text-align: center;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Apply for Support</h1>
+  <form id="appForm" novalidate>
+    <label>Full Name:
+      <input type="text" name="full_name" required />
+    </label>
+    <label>Email Address:
+      <input type="email" name="email" required />
+    </label>
+    <label>Program Type:
+      <select name="program_type" required>
+        <option value="">Select one</option>
+        <option value="Financial Assistance">Financial Assistance</option>
+        <option value="Equipment & Technology">Equipment & Technology</option>
+        <option value="Community Support">Community Support</option>
+      </select>
+    </label>
+    <label>Brief Summary:
+      <textarea name="summary" rows="4" placeholder="Tell us a bit about your need..."></textarea>
+    </label>
+    <button type="submit">Submit Application</button>
+    <div id="appFormStatus" aria-live="polite"></div>
+  </form>
+
+  <script>
+    const form = document.getElementById('appForm');
+    const statusBox = document.getElementById('appFormStatus');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      try {
+        const res = await fetch("https://ajhltmrehtytpzbdhepa.supabase.co/functions/v1/submitApplication", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if (result.success) {
+          statusBox.textContent = "✅ Application submitted successfully!";
+          form.reset();
+        } else {
+          statusBox.textContent = "❌ " + (result.error || "Something went wrong.");
+        }
+      } catch (err) {
+        statusBox.textContent = "❌ Submission failed: " + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
